@@ -1,0 +1,28 @@
+# OS/Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs / temp
+*.log
+*.tmp
+tmp/
+cache/
+
+# Local secrets
+includes/pollinations.key
+
+# SQLite databases (local only)
+data/*.db
+data/*.sqlite
+data/*.sqlite*
+data/*.db3
+data/*.sqlite3
+data/*.sqlite-shm
+data/*.sqlite-wal
+
+# PHP vendor (if added later)
+vendor/
+composer.lock
+
