@@ -1,0 +1,220 @@
+{
+  "info": {
+    "name": "Bestiarium API",
+    "description": "Collection de requêtes pour tester l'API Bestiarium (auth, types, créatures, hybrides, combats).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"mon_pseudo\",\n  \"email\": \"moi@example.com\",\n  \"password\": \"MonSuperMotDePasse123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/auth/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"moi@example.com\",\n  \"password\": \"MonSuperMotDePasse123!\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Types - List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/types",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["types"]
+        }
+      }
+    },
+    {
+      "name": "Types - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Licorne\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/types",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["types"]
+        }
+      }
+    },
+    {
+      "name": "Creatures - List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/creatures",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["creatures"]
+        }
+      }
+    },
+    {
+      "name": "Creatures - Create (manual)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Tortue des Abysses\",\n  \"type\": \"Tortue\",\n  \"description\": \"Une tortue géante qui hante les profondeurs.\",\n  \"heads\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/creatures",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["creatures"]
+        }
+      }
+    },
+    {
+      "name": "Creatures - Generate from prompt",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"prompt\": \"une licorne géante et dangereuse\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/creatures/generate",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["creatures", "generate"]
+        }
+      }
+    },
+    {
+      "name": "Hybrids - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"creature_1\": 1,\n  \"creature_2\": 2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/hybrids",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["hybrids"]
+        }
+      }
+    },
+    {
+      "name": "Hybrids - List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/hybrids",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["hybrids"]
+        }
+      }
+    },
+    {
+      "name": "Combat - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"creature_1\": 1,\n  \"creature_2\": 2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/combat",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["combat"]
+        }
+      }
+    },
+    {
+      "name": "Combat - List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/combat",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["combat"]
+        }
+      }
+    }
+  ]
+}
+

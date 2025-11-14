@@ -53,6 +53,50 @@ class Pollinations
         return [$health, $def, $atk];
     }
 
+    // Génère une description d'hybride en se basant sur les parents
+    public static function generateHybridDescription(string $name, string $typeName, array $parentA, array $parentB): string
+    {
+        $p1Name = trim((string)($parentA['name'] ?? ''));
+        $p1Type = trim((string)($parentA['type_name'] ?? ''));
+        $p1Desc = trim((string)($parentA['description'] ?? ''));
+
+        $p2Name = trim((string)($parentB['name'] ?? ''));
+        $p2Type = trim((string)($parentB['type_name'] ?? ''));
+        $p2Desc = trim((string)($parentB['description'] ?? ''));
+
+        $basePrompt = sprintf(
+            'Write a short, vivid description (2-3 sentences) of a hybrid mythical creature named %s, of type %s. ' .
+            'It is born from the fusion of %s (%s) described as: %s; and %s (%s) described as: %s.',
+            $name,
+            $typeName,
+            $p1Name,
+            $p1Type,
+            $p1Desc !== '' ? $p1Desc : 'no description',
+            $p2Name,
+            $p2Type,
+            $p2Desc !== '' ? $p2Desc : 'no description'
+        );
+
+        $url = 'https://text.pollinations.ai/' . rawurlencode($basePrompt);
+        $ctx = stream_context_create(['http' => ['timeout' => 6]]);
+        $txt = @file_get_contents($url, false, $ctx);
+        if ($txt && is_string($txt)) {
+            $txt = trim($txt);
+            if ($txt !== '') {
+                return mb_substr($txt, 0, 800);
+            }
+        }
+
+       
+        return sprintf(
+            "%s est une créature hybride de type %s, née de la fusion de %s et %s. Elle hérite des traits de ses parents et incarne un mélange instable de leurs pouvoirs.",
+            $name,
+            ($typeName ?: 'Hybride'),
+            $p1Name !== '' ? $p1Name : 'une première créature',
+            $p2Name !== '' ? $p2Name : 'une seconde créature'
+        );
+    }
+
     // Propose un nom court à partir du prompt
     public static function nameFromPrompt(string $prompt): string
     {
@@ -89,14 +133,14 @@ class Pollinations
         return null;
     }
 
-    // Petit générateur pseudo-aléatoire 
+    // générateur pseudo-aléatooire 
     private static function lcg(int $seed): callable
     {
         $mod = 2**31 - 1; $a = 1103515245; $c = 12345; $state = $seed & 0x7fffffff;
         return function() use (&$state, $a, $c, $mod) { $state = (int)(($a * $state + $c) % $mod); return $state / $mod; };
     }
 
-    private static function ucwordsUnicode(string $s): string
+    public static function ucwordsUnicode(string $s): string
     {
         return preg_replace_callback('/\b(\p{L})(\p{L}*)/u', function($m){
             return mb_strtoupper($m[1]) . mb_strtolower($m[2]);

@@ -2,13 +2,15 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-$path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-
+require_once __DIR__ . '/includes/init.api.php';
 require_once __DIR__ . '/includes/controllers/types.controller.php';
 require_once __DIR__ . '/includes/controllers/monsters.controller.php';
 require_once __DIR__ . '/includes/controllers/auth.controller.php';
 require_once __DIR__ . '/includes/controllers/matchs.controller.php';
+require_once __DIR__ . '/includes/controllers/hybrids.controller.php';
+
+$path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 if ($path === '/health') {
     echo json_encode([ 'db' => 'not_configured' ], JSON_UNESCAPED_UNICODE);
@@ -53,6 +55,17 @@ if ($path === '/creatures' && $method === 'GET') { MonstersController::index(); 
 // GET /creatures/{id} : détail d’une créature
 if (preg_match('#^/creatures/(\d+)$#', $path, $m) && $method === 'GET') { MonstersController::show((int)$m[1]); exit; }
 
+// PUT /creatures/{id} : mise à jour d’une créature
+if (preg_match('#^/creatures/(\d+)$#', $path, $m) && $method === 'PUT') {
+    $raw = file_get_contents('php://input') ?: '';
+    $data = json_decode($raw, true);
+    if (!is_array($data)) { http_response_code(400); echo json_encode(['error' => ['message' => 'Invalid JSON body']]); exit; }
+    MonstersController::update((int)$m[1], $data); exit;
+}
+
+// DELETE /creatures/{id} : suppression d’une créature
+if (preg_match('#^/creatures/(\d+)$#', $path, $m) && $method === 'DELETE') { MonstersController::destroy((int)$m[1]); exit; }
+
 // GET /creatures/{id}/image : redirige vers l'image Pollinations
 if (preg_match('#^/creatures/(\d+)/image$#', $path, $m) && $method === 'GET') { MonstersController::image((int)$m[1]); exit; }
 // POST /creatures/{id}/image : (re)génère et enregistre l'URL image
@@ -72,6 +85,16 @@ if ($path === '/creatures/generate' && $method === 'POST') {
     $data = json_decode($raw, true);
     if (!is_array($data)) { http_response_code(400); echo json_encode(['error' => ['message' => 'Invalid JSON body']]); exit; }
     MonstersController::generate($data); exit;
+}
+
+// Hybrides : fusion de créatures
+if ($path === '/hybrids' && $method === 'GET') { HybridsController::index(); exit; }
+if (preg_match('#^/hybrids/(\d+)$#', $path, $m) && $method === 'GET') { HybridsController::show((int)$m[1]); exit; }
+if ($path === '/hybrids' && $method === 'POST') {
+    $raw = file_get_contents('php://input') ?: '';
+    $data = json_decode($raw, true);
+    if (!is_array($data)) { http_response_code(400); echo json_encode(['error' => ['message' => 'Invalid JSON body']]); exit; }
+    HybridsController::store($data); exit;
 }
 
 // Combat

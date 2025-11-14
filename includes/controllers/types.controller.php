@@ -52,7 +52,9 @@ class TypesController
     {
         try {
             $name = isset($data['name']) ? trim((string)$data['name']) : '';
-            $createdBy = isset($data['created_by']) ? (int)$data['created_by'] : 1; // défaut dev
+            // Utilisateur effectif: JWT si présent, sinon user de démo (id=1)
+            $createdBy = api_effective_user_id(1);
+
             if ($name === '') {
                 http_response_code(400);
                 echo json_encode(['error' => ['message' => 'Field "name" is required']], JSON_UNESCAPED_UNICODE);
